@@ -72,7 +72,7 @@ namespace TextFileTransformation
 
                 foreach (string subDirectory in Directory.GetDirectories(directoryPath, "*", SearchOption.TopDirectoryOnly))
                 {
-                    ForceDeleteDirectory(subDirectory); // Recursively delete subdirectories
+                    ForceDeleteDirectory(subDirectory); // Recursively delete subdirectories.
                 }
 
                 Directory.Delete(directoryPath, false);
@@ -82,5 +82,5 @@ namespace TextFileTransformation
                 Console.WriteLine($"Directory '{directoryPath}' does not exist.");
             }
         }
-    }
+    } 
 }
