@@ -26,7 +26,7 @@ namespace TextFileTransformation
             string[] directoriesA = Directory.GetDirectories(FilePathA);
             foreach (var dir in directoriesA)
             {
-                Directory.Delete(dir, true);
+                ForceDeleteDirectory(dir);
             }
             CopyFiles(FilePathB, FilePathA);
             CopyDirectories(FilePathB, FilePathA);
@@ -43,7 +43,6 @@ namespace TextFileTransformation
                 File.Copy(file, destFilePath);
             }
         }
-
         static void CopyDirectories(string sourcePath, string destPath)
         {
             string[] directories = Directory.GetDirectories(sourcePath);
@@ -55,7 +54,33 @@ namespace TextFileTransformation
                 CopyFiles(dir, destDirPath); 
                 CopyDirectories(dir, destDirPath); 
             }
+        }
+        static void ForceDeleteDirectory(string directoryPath)
+        {
+            if (Directory.Exists(directoryPath))
+            {
+                foreach (string file in Directory.GetFiles(directoryPath, "*", SearchOption.AllDirectories))
+                {
+                    FileInfo fileInfo = new FileInfo(file);
+                    if ((fileInfo.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                    {
+                        fileInfo.Attributes &= ~FileAttributes.ReadOnly; // Remove read-only attribute
+                    }
 
+                    File.Delete(file); // Delete the file
+                }
+
+                foreach (string subDirectory in Directory.GetDirectories(directoryPath, "*", SearchOption.TopDirectoryOnly))
+                {
+                    ForceDeleteDirectory(subDirectory); // Recursively delete subdirectories
+                }
+
+                Directory.Delete(directoryPath, false);
+            }
+            else
+            {
+                Console.WriteLine($"Directory '{directoryPath}' does not exist.");
+            }
         }
     }
 }
