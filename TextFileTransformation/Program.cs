@@ -14,9 +14,11 @@ namespace TextFileTransformation
     {
         static void Main(string[] args)
         {
+            string SourceFolder = "B";
+            string TargetFolder = "A";
             string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            string FilePathA = $"{desktopPath}\\A";
-            string FilePathB = $"{desktopPath}\\B";
+            string FilePathA = $"{desktopPath}\\{TargetFolder}";
+            string FilePathB = $"{desktopPath}\\{SourceFolder}";
             string[] FilesOrFoldersB = Directory.GetFileSystemEntries(FilePathB);
             string[] filesA = Directory.GetFiles(FilePathA);
             foreach (var file in filesA)
@@ -30,6 +32,7 @@ namespace TextFileTransformation
             }
             CopyFiles(FilePathB, FilePathA);
             CopyDirectories(FilePathB, FilePathA);
+            ForceDeleteDirectory(FilePathB);
             Console.WriteLine("...SUCSESS...");
             Console.ReadLine();
         }
@@ -82,5 +85,5 @@ namespace TextFileTransformation
                 Console.WriteLine($"Directory '{directoryPath}' does not exist.");
             }
         }
-    } 
+    }
 }
